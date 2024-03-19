@@ -12,20 +12,19 @@ def connect():
         connection = psycopg2.connect(
             dbname=DB_NAME, user=USER, password=PASSWORD, host=HOST, port=PORT
         )
-        print("Connected to the database!")
     except Exception as e:
         print(f"Error: {e}")
         exit(1)
     return connection
 
 
-def query(query, returnData):
+def query(query, return_data, vars=None):
     connection = None
     try:
         connection = connect()
         cursor = connection.cursor()
-        cursor.execute(query)
-        if returnData:
+        cursor.execute(query, vars)
+        if return_data:
             data = cursor.fetchall()
             cursor.close()
             return data
@@ -46,59 +45,19 @@ def getAllStudents():
 
 
 def addStudent(first_name, last_name, email, enrollment_date):
-    connection = None
-    try:
-        connection = connect()
-        cursor = connection.cursor()
-        cursor.execute(
-            "INSERT INTO students (first_name, last_name, email, enrollment_date) VALUES (%s, %s, %s, %s)",
-            (first_name, last_name, email, enrollment_date),
-        )
-        connection.commit()
-        cursor.close()
-        return True
-    except Exception as e:
-        print(f"Error: {e}")
-        exit(1)
-    finally:
-        if connection:
-            connection.close()
+    return query(
+        "INSERT INTO students (first_name, last_name, email, enrollment_date) VALUES (%s, %s, %s, %s)",
+        False,
+        (first_name, last_name, email, enrollment_date),
+    )
 
 
 def updateStudentEmail(student_id, email):
-    connection = None
-    try:
-        connection = connect()
-        cursor = connection.cursor()
-        cursor.execute(
-            "UPDATE students SET email = %s WHERE student_id = %s", (email, student_id)
-        )
-        connection.commit()
-        cursor.close()
-        return True
-    except Exception as e:
-        print(f"Error: {e}")
-        exit(1)
-    finally:
-        if connection:
-            connection.close()
+    return query("UPDATE students SET email = %s WHERE student_id = %s", False, (email, student_id))
 
 
 def deleteStudent(student_id):
-    connection = None
-    try:
-        connection = connect()
-        cursor = connection.cursor()
-        cursor.execute("DELETE FROM students WHERE student_id = %s", (student_id,))
-        connection.commit()
-        cursor.close()
-        return True
-    except Exception as e:
-        print(f"Error: {e}")
-        exit(1)
-    finally:
-        if connection:
-            connection.close()
+    return query("DELETE FROM students WHERE student_id = %s", False, (student_id))
 
 
 while True:
