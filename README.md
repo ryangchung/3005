@@ -17,8 +17,11 @@ python main.py
 
 ### Function Explanation
 `getAllStudents()`: Selects all from the `students` table and returns the contents to the REPL to be displayed.
+
 `addStudent(first_name, last_name, email, enrollment_date)`: Adds a new student to the `students` table based on the given parameters and returns True/False status on the operation to the REPL to be displayed.
+
 `updateStudentEmail(student_id, new_email)`: Updates a student email based on the provided `student_id` and returns True/False on the operation to the REPL to be displayed.
+
 `deleteStudent(student_id)`: Deletes a record based on the `student_id` and returns True/False on the operation to the REPL to be displayed.
 
 ### Error Handling
